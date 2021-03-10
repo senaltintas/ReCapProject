@@ -1,9 +1,13 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
+using Core.Validation;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +24,7 @@ namespace Business.Concrete
        
         public IDataResult<List<Car>> GetAll()
         {
-            if (DateTime.Now.Hour == 23)
+            if (DateTime.Now.Hour == 20)
             {
                 return new ErrorDataResult<List<Car>>(Messages.MaintananceTime);
             }
@@ -38,14 +42,29 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Car>>( _carDal.GetAll(p => p.ColorId == colorId));
         }
+        
+        [ValidationAspect(typeof(CarValidator))] //carvalidator'e göre metodu doğrula.
         public IResult Add(Car car)
         {
-            if (car.Description.Length > 2 && car.DailyPrice > 0)
-            {
-                return new SuccessResult(Messages.SucceedAdded);
-            }
-            else
-                return new ErrorResult(Messages.InvalidAdded);
+          
+            //business code 
+
+            _carDal.Add(car);
+           return new SuccessResult(Messages.SucceedAdded);
+           
+        }
+
+
+        [ValidationAspect(typeof(CarValidator))]
+        public IResult Update(Car car)
+        {
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
+        }
+        public IResult Delete(Car car)
+        {
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleted);
         }
 
         public IDataResult< List<CarDetailDto>> GetCarDetails()

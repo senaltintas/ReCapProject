@@ -26,5 +26,13 @@ namespace Business.Constants
         public static string RentalUpdated = "Rental has been updated.";
         public  static string SuccedRentalAdded = "Rental has been added.";
         public static string FailRentalAdded = " In order for the car to be rented, it must be delivered.Please check it later!";
+        internal static string ColorAdded;
+        internal static string ColorUpdated;
+        internal static string ColorDeleted;
+        internal static string BrandAdded;
+        internal static string BrandUpdated;
+        internal static string BrandDeleted;
+        internal static string CarUpdated;
+        internal static string CarDeleted;
     }
 }
